@@ -1,0 +1,44 @@
+services:
+  trino:
+    hostname: trino
+    image: 'trinodb/trino:latest'
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./trino/catalog:/etc/trino/catalog:ro
+
+  jaffle_webshop:
+    image: postgres:11
+    container_name: jaffle_webshop
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "15432:5432"
+
+  clickhouse-server:
+    image: clickhouse/clickhouse-server
+    container_name: clickhouse-server
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    volumes:
+      - ./data:/var/lib/clickhouse
+      - ./logs:/var/log/clickhouse-server
+    environment:
+      - CLICKHOUSE_DB=clickhouse
+      - CLICKHOUSE_USER=clickhouse
+      - CLICKHOUSE_PASSWORD=clickhouse
+    ports:
+      - "8123:8123"
+
+  dbt:
+    container_name: dbt
+    build: .
+    image: dbt-jaffle-shop
+    volumes:
+      - ./dbt:/usr/src/dbt

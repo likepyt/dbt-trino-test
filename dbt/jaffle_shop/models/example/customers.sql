@@ -1,0 +1,1 @@
+select * from {{ source('pg_raw', 'raw_customers') }}

@@ -1,0 +1,22 @@
+jaffle_shop:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: jaffle_webshop
+      user: postgres
+      password: postgres
+      port: 5432
+      dbname: postgres
+      schema: public
+      threads: 4
+    trino_ch:
+      type: trino
+      method: none
+      user: admin
+      password:
+      host: trino
+      database: ch
+      schema: default
+      port: 8080
+      threads: 1
